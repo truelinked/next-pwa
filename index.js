@@ -48,6 +48,7 @@ module.exports = (nextConfig = {}) => ({
       cacheOnFrontEndNav = false,
       scope = basePath,
       subdomainPrefix,  // deprecated, use basePath in next.config.js instead
+      staticDomainPrefix  = '',
       ...workbox
     } = pwa
 
@@ -146,7 +147,7 @@ module.exports = (nextConfig = {}) => ({
             }
           )
           .map(f => ({
-            url: path.posix.join(basePath, `/${f}`),
+            url: staticDomainPrefix + path.posix.join(basePath, `/${f}`),
             revision: getRevision(`public/${f}`)
           }))
       }
@@ -211,7 +212,7 @@ module.exports = (nextConfig = {}) => ({
         ],
         modifyURLPrefix: {
           ...modifyURLPrefix,
-          [prefix]: path.posix.join(basePath, '/_next/static/')
+          [prefix]: staticDomainPrefix + path.posix.join(basePath, '/_next/static/')
         },
         manifestTransforms: [
           ...manifestTransforms,
