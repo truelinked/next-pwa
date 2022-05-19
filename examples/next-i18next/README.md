@@ -1,6 +1,4 @@
-
-
-# next-pwa - i18n example
+# next-pwa - i18n example (TODO: broken, need fix)
 
 [TOC]
 

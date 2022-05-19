@@ -1,5 +1,114 @@
 # CHANGELOG
 
+**NOTE: for newer changelog, go to [release page](https://github.com/shadowwalker/next-pwa/releases) instead.**
+
+## 5.5.0
+
+### Fix
+
+1. Update precache manifest revision to `contenthash` from webpack, [suggested by @ammar-oker](https://github.com/shadowwalker/next-pwa/issues/336)
+
+### Misc
+
+- Update dependencies
+
+### Fix
+
+1. (the real) Fix for not precache server js
+2. Fix service worker register url edge case
+
+## 5.4.7
+
+### Fix
+
+1. (the real) Fix for not precache server js
+2. Fix service worker register url edge case
+
+## 5.4.6
+
+### Fix
+
+- [fixed buildExcludes options not working](https://github.com/shadowwalker/next-pwa/pull/333)
+
+### Misc
+
+- Update examples and dependencies
+
+## 5.4.5
+
+### Fix
+
+- [Fix double // for precache in static/media](https://github.com/shadowwalker/next-pwa/pull/319)
+- [Fixing middleware-runtime.js error](https://github.com/shadowwalker/next-pwa/pull/325)
+
+## 5.4.4
+
+### Misc
+
+- Update examples and dependencies
+
+## 5.4.2
+
+### Fix
+
+- Exclude `middleware-manifest.json` from precache
+
+### Misc
+
+- Update examples and dependencies
+
+## 5.4.0
+
+1. [Add custom worker directory config (@TimoWilhelm)](https://github.com/shadowwalker/next-pwa/pull/282)
+
+## 5.3.2
+
+### Misc
+
+- Update examples and dependencies
+
+## 5.3.1
+
+1. Default range requests for audios and videos
+
+## 5.2.25
+
+### Fix
+
+1. [Add support for pageExtensions](https://github.com/shadowwalker/next-pwa/issues/261)
+
+### Misc
+
+- Update examples and dependencies
+
+## 5.2.24
+
+### Fix
+
+1. [Back online reload behaviour configurable](https://github.com/shadowwalker/next-pwa/issues/232)
+
+## 5.2.23
+
+### Fix
+
+1. Fix double `//` when precache `next/image` url - [Issue 231](https://github.com/shadowwalker/next-pwa/issues/231)
+
+### Misc
+
+- Add `next-image` example
+
+## 5.2.22
+
+### Fix
+
+1. [Fix dynamic routes url encoding issue](https://github.com/shadowwalker/next-pwa/issues/223)
+2. Add check for caches before register - @redian
+3. Add cross origin cache configuration
+
+### Misc
+
+- Update examples and dependencies
+
 ## 5.2.17
 
 ### Fix

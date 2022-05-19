@@ -58,10 +58,23 @@ module.exports = [
     },
   },
   {
-    urlPattern: /\.(?:mp3|mp4)$/i,
-    handler: 'StaleWhileRevalidate',
+    urlPattern: /\.(?:mp3|wav|ogg)$/i,
+    handler: 'CacheFirst',
     options: {
-      cacheName: 'static-media-assets',
+      rangeRequests: true,
+      cacheName: 'static-audio-assets',
+      expiration: {
+        maxEntries: 32,
+        maxAgeSeconds: 24 * 60 * 60 // 24 hours
+      }
+    }
+  },
+  {
+    urlPattern: /\.(?:mp4)$/i,
+    handler: 'CacheFirst',
+    options: {
+      rangeRequests: true,
+      cacheName: 'static-video-assets',
       expiration: {
         maxEntries: 32,
         maxAgeSeconds: 24 * 60 * 60 // 24 hours
@@ -149,6 +162,21 @@ module.exports = [
       expiration: {
         maxEntries: 32,
         maxAgeSeconds: 24 * 60 * 60 // 24 hours
+      },
+      networkTimeoutSeconds: 10
+    }
+  },
+  {
+    urlPattern: ({url}) => {
+      const isSameOrigin = self.origin === url.origin
+      return !isSameOrigin
+    },
+    handler: 'NetworkFirst',
+    options: {
+      cacheName: 'cross-origin',
+      expiration: {
+        maxEntries: 32,
+        maxAgeSeconds: 60 * 60 // 1 hour
       },
       networkTimeoutSeconds: 10
     }

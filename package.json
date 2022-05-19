@@ -1,6 +1,6 @@
 {
   "name": "next-pwa",
-  "version": "5.2.21",
+  "version": "5.5.2",
   "description": "Next.js with PWA, powered by workbox.",
   "main": "index.js",
   "repository": "https://github.com/shadowwalker/next-pwa",
@@ -15,17 +15,20 @@
     "service-worker"
   ],
   "dependencies": {
-    "babel-loader": "^8.2.2",
-    "clean-webpack-plugin": "^3.0.0",
-    "globby": "^11.0.3",
-    "terser-webpack-plugin": "^5.1.1",
-    "workbox-webpack-plugin": "^6.1.5",
-    "workbox-window": "^6.1.5"
+    "babel-loader": "^8.2.4",
+    "clean-webpack-plugin": "^4.0.0",
+    "globby": "^11.0.4",
+    "terser-webpack-plugin": "^5.3.1",
+    "workbox-webpack-plugin": "^6.5.2",
+    "workbox-window": "^6.5.2"
   },
   "devDependencies": {
-    "webpack": "^5.35.1"
+    "webpack": "^5.72.0"
   },
   "peerDependencies": {
-    "next": ">=7.0.0"
+    "next": ">=9.0.0"
+  },
+  "resolutions": {
+    "@typescript-eslint/eslint-plugin": "5.18.0"
   }
 }

@@ -6,7 +6,7 @@ const webpack = require('webpack')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 
-const getFallbackEnvs = ({fallbacks, basedir, id}) => {
+const getFallbackEnvs = ({fallbacks, basedir, id, pageExtensions}) => {
   let { document, data } = fallbacks
 
   if (!document) {
@@ -20,7 +20,7 @@ const getFallbackEnvs = ({fallbacks, basedir, id}) => {
 
     if (!pagesDir) return
 
-    const offlines = ['tsx', 'ts', 'jsx', 'js', 'mdx']
+    const offlines = pageExtensions
       .map(ext => path.join(pagesDir, `_offline.${ext}`))
       .filter(entry => fs.existsSync(entry))
     if (offlines.length === 1) {
@@ -54,8 +54,8 @@ const getFallbackEnvs = ({fallbacks, basedir, id}) => {
   return envs
 }
 
-const buildFallbackWorker = ({ id, fallbacks, basedir, destdir, success, minify }) => {
-  const envs = getFallbackEnvs({fallbacks, basedir, id})
+const buildFallbackWorker = ({ id, fallbacks, basedir, destdir, success, minify, pageExtensions }) => {
+  const envs = getFallbackEnvs({fallbacks, basedir, id, pageExtensions})
   if (!envs) return false
 
   const name = `fallback-${id}.js`
@@ -68,7 +68,22 @@ const buildFallbackWorker = ({ id, fallbacks, basedir, destdir, success, minify 
       main: fallbackJs
     },
     resolve: {
-      extensions: ['.js']
+      extensions: ['.js'],
+      fallback: {
+        module: false,
+        dgram: false,
+        dns: false,
+        path: false,
+        fs: false,
+        os: false,
+        crypto: false,
+        stream: false,
+        http2: false,
+        net: false,
+        tls: false,
+        zlib: false,
+        child_process: false
+      }
     },
     module: {
       rules: [

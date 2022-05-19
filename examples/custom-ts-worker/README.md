@@ -1,5 +1,3 @@
-
-
 # next-pwa - custom worker example
 
 [TOC]
@@ -13,6 +11,25 @@ Simply create a `worker/index.ts` and start implementing your service worker. `n
 In this way, you get benefit of code splitting and size minimization automatically. Yes! `require` modules works! Yes! you can share codes between web app and the service worker!
 
 > - In dev mode, `worker/index.ts` is not watch, so it will not hot reload.
+
+### Custom Worker Directory
+
+You can customize the directory of your custom worker file by setting the `customWorkerDir` relative to the `basedir` in the `pwa` section of your `next.config.js`:
+
+
+``` javascript
+const withPWA = require('next-pwa')
+
+module.exports = withPWA({
+  pwa: {
+    customWorkerDir: 'serviceworker'
+    ...
+  }
+})
+```
+
+In this example, `next-pwa` would look for `serviceworker/index.ts`.
+
 
 ## Old Method (Still Works)
 

@@ -15,6 +15,7 @@ This plugin is powered by [workbox](https://developers.google.com/web/tools/work
 - 📴 Completely offline support with fallbacks [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/offline-fallback-v2) 🆕
 - 📦 Use [workbox](https://developers.google.com/web/tools/workbox/) and [workbox-window](https://developers.google.com/web/tools/workbox/modules/workbox-window) v6
 - 🍪 Work with cookies out of the box
+- 🔉 Default range requests for audios and videos
 - ☕ No custom server needed for Next.js 9+ [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9)
 - 🔧 Handle PWA lifecycle events opt-in [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/lifecycle)
 - 📐 Custom worker to run extra code with code splitting and **typescript** support [example](https://github.com/shadowwalker/next-pwa/tree/master/examples/custom-ts-worker)
@@ -52,13 +53,18 @@ Update or create `next.config.js` with
 const withPWA = require('next-pwa')
 
 module.exports = withPWA({
-  // other next config
+  pwa: {
+    dest: 'public'
+  }
 })
 ```
 
-After running `next build`, this will generate two files in your `distDir` (default is `.next` folder): `workbox-*.js` and `sw.js`, which you need to serve statically, either through static file hosting service or using custom `server.js`.
+After running `next build`, this will generate two files in your `public`: `workbox-*.js` and `sw.js`, which will automatically be served statically.
 
-> If you are using Next.js 9+, you may not need a custom server to host your service worker files. Skip to next section to see the details.
+If you are using Next.js version 9 or newer, then skip the options below and move on to Step 2.
+
+If you are using Next.js older than version 9, you'll need to pick an option below before continuing to Step 2.
+
 
 ### Option 1: Host Static Files
 
@@ -106,7 +112,7 @@ app.prepare()
 
 ### Step 2: Add Manifest File (Example)
 
-Create a `manifest.json` file in your `static` folder:
+Create a `manifest.json` file in your `public` folder:
 
 ```json
 {
@@ -114,18 +120,18 @@ Create a `manifest.json` file in your `static` folder:
   "short_name": "App",
   "icons": [
     {
-      "src": "/static/icons/android-chrome-192x192.png",
+      "src": "/icons/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/static/icons/android-chrome-384x384.png",
+      "src": "/icons/android-chrome-384x384.png",
       "sizes": "384x384",
       "type": "image/png"
     },
     {
-      "src": "/static/icons/icon-512x512.png",
+      "src": "/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
@@ -140,7 +146,7 @@ Create a `manifest.json` file in your `static` folder:
 
 ### Step 3: Add Head Meta (Example)
 
-Add the following into `_document.jsx` or `_document.tsx`, in `<Head>`:
+Add the following into `_document.jsx` or `_app.tsx`, in `<Head>`:
 
 ``` html
 <meta name='application-name' content='PWA App' />
@@ -150,20 +156,20 @@ Add the following into `_document.jsx` or `_document.tsx`, in `<Head>`:
 <meta name='description' content='Best PWA App in the world' />
 <meta name='format-detection' content='telephone=no' />
 <meta name='mobile-web-app-capable' content='yes' />
-<meta name='msapplication-config' content='/static/icons/browserconfig.xml' />
+<meta name='msapplication-config' content='/icons/browserconfig.xml' />
 <meta name='msapplication-TileColor' content='#2B5797' />
 <meta name='msapplication-tap-highlight' content='no' />
 <meta name='theme-color' content='#000000' />
 
-<link rel='apple-touch-icon' href='/static/icons/touch-icon-iphone.png'>
-<link rel='apple-touch-icon' sizes='152x152' href='/static/icons/touch-icon-ipad.png'>
-<link rel='apple-touch-icon' sizes='180x180' href='/static/icons/touch-icon-iphone-retina.png'>
-<link rel='apple-touch-icon' sizes='167x167' href='/static/icons/touch-icon-ipad-retina.png'>
+<link rel='apple-touch-icon' href='/icons/touch-icon-iphone.png' />
+<link rel='apple-touch-icon' sizes='152x152' href='/icons/touch-icon-ipad.png' />
+<link rel='apple-touch-icon' sizes='180x180' href='/icons/touch-icon-iphone-retina.png' />
+<link rel='apple-touch-icon' sizes='167x167' href='/icons/touch-icon-ipad-retina.png' />
 
-<link rel='icon' type='image/png' sizes='32x32' href='/static/icons/favicon-32x32.png' />
-<link rel='icon' type='image/png' sizes='16x16' href='/static/icons/favicon-16x16.png' />
-<link rel='manifest' href='/static/manifest.json' />
-<link rel='mask-icon' href='/static/icons/safari-pinned-tab.svg' color='#5bbad5' />
+<link rel='icon' type='image/png' sizes='32x32' href='/icons/favicon-32x32.png' />
+<link rel='icon' type='image/png' sizes='16x16' href='/icons/favicon-16x16.png' />
+<link rel='manifest' href='/manifest.json' />
+<link rel='mask-icon' href='/icons/safari-pinned-tab.svg' color='#5bbad5' />
 <link rel='shortcut icon' href='/favicon.ico' />
 <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500' />
      
@@ -171,24 +177,24 @@ Add the following into `_document.jsx` or `_document.tsx`, in `<Head>`:
 <meta name='twitter:url' content='https://yourdomain.com' />
 <meta name='twitter:title' content='PWA App' />
 <meta name='twitter:description' content='Best PWA App in the world' />
-<meta name='twitter:image' content='https://yourdomain.com/static/icons/android-chrome-192x192.png' />
+<meta name='twitter:image' content='https://yourdomain.com/icons/android-chrome-192x192.png' />
 <meta name='twitter:creator' content='@DavidWShadow' />
 <meta property='og:type' content='website' />
 <meta property='og:title' content='PWA App' />
 <meta property='og:description' content='Best PWA App in the world' />
 <meta property='og:site_name' content='PWA App' />
 <meta property='og:url' content='https://yourdomain.com' />
-<meta property='og:image' content='https://yourdomain.com/static/icons/apple-touch-icon.png' />
+<meta property='og:image' content='https://yourdomain.com/icons/apple-touch-icon.png' />
 
 <!-- apple splash screen images -->
 <!--
-<link rel='apple-touch-startup-image' href='/static/images/apple_splash_2048.png' sizes='2048x2732' />
-<link rel='apple-touch-startup-image' href='/static/images/apple_splash_1668.png' sizes='1668x2224' />
-<link rel='apple-touch-startup-image' href='/static/images/apple_splash_1536.png' sizes='1536x2048' />
-<link rel='apple-touch-startup-image' href='/static/images/apple_splash_1125.png' sizes='1125x2436' />
-<link rel='apple-touch-startup-image' href='/static/images/apple_splash_1242.png' sizes='1242x2208' />
-<link rel='apple-touch-startup-image' href='/static/images/apple_splash_750.png' sizes='750x1334' />
-<link rel='apple-touch-startup-image' href='/static/images/apple_splash_640.png' sizes='640x1136' />
+<link rel='apple-touch-startup-image' href='/images/apple_splash_2048.png' sizes='2048x2732' />
+<link rel='apple-touch-startup-image' href='/images/apple_splash_1668.png' sizes='1668x2224' />
+<link rel='apple-touch-startup-image' href='/images/apple_splash_1536.png' sizes='1536x2048' />
+<link rel='apple-touch-startup-image' href='/images/apple_splash_1125.png' sizes='1125x2436' />
+<link rel='apple-touch-startup-image' href='/images/apple_splash_1242.png' sizes='1242x2208' />
+<link rel='apple-touch-startup-image' href='/images/apple_splash_750.png' sizes='750x1334' />
+<link rel='apple-touch-startup-image' href='/images/apple_splash_640.png' sizes='640x1136' />
 -->
 ```
 
@@ -197,23 +203,6 @@ Add the following into `_document.jsx` or `_document.tsx`, in `<Head>`:
 ``` typescript
 <meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover' />
 ```
-
-## Usage Without Custom Server (next.js 9+)
-
-Thanks to **Next.js 9+**, we can use the `public` folder to serve static files from the root `/` URL path. It cuts the need to write custom server only to serve those files. Therefore the setup is easier and concise. We can use `next.config.js` to config `next-pwa` to generates service worker and workbox files into the `public` folder.
-### withPWA
-
-``` javascript
-const withPWA = require('next-pwa')
-
-module.exports = withPWA({
-  pwa: {
-    dest: 'public'
-  }
-})
-```
-
-**[Use this example to see it in action](https://github.com/shadowwalker/next-pwa/tree/master/examples/next-9)**
 
 ## Offline Fallbacks
 
@@ -273,11 +262,16 @@ module.exports = withPWA({
   - default: `[]`
   - example: `[/chunks\/images\/.*$/]` - Don't precache files under `.next/static/chunks/images` (Highly recommend this to work with  `next-optimized-images` plugin)
   - doc: Array of (string, RegExp, or function()). One or more specifiers used to exclude assets from the precache manifest. This is interpreted following the same rules as Webpack's standard exclude option.
+- cacheStartUrl - whether to cache start url
+  - default: `true`
+  - [discussion of use case to not cache start url at all](https://github.com/shadowwalker/next-pwa/pull/296#issuecomment-1094167025)
 - dynamicStartUrl - if your start url returns different HTML document under different state (such as logged in vs. not logged in), this should be set to true.
   - default: `true`
+  - effective when `cacheStartUrl` set to `true`
   - recommend: set to **false** if your start url always returns same HTML document, then start url will be precached, this will help to speed up first load.
 - dynamicStartUrlRedirect - if your start url redirect to another route such as `/login`, it's recommended to setup this redirected url for the best user experience.
   - default: `undefined`
+  - effective when `dynamicStartUrlRedirect` set to `true`
 - fallbacks - config precached routes to fallback when both cache and network not available to serve resources.
   - **if you just need a offline fallback page, simply create a `/_offline` page such as `pages/_offline.js` and you are all set, no configuration necessary**
   - default: `object`
@@ -293,6 +287,10 @@ module.exports = withPWA({
   - ~~default: `""` - i.e. default with no prefix~~
   - ~~example: `/subdomain` if the app is hosted on `example.com/subdomain`~~
   - deprecated, use [basePath](https://nextjs.org/docs/api-reference/next.config.js/basepath) instead
+- reloadOnOnline - changes the behaviour of the app when the device detects that it has gone back "online" and has a network connection. Indicate if the app should call `location.reload()` to refresh the app.
+  - default: `true`
+- customWorkerDir - customize the directory where `next-pwa` looks for a custom worker implementation to add to the service worker generated by workbox. For more information, check out the [custom worker example](https://github.com/shadowwalker/next-pwa/tree/master/examples/custom-ts-worker).
+  - default: `worker`
 
 ### Other Options
 
